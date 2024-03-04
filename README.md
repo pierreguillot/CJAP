@@ -47,6 +47,7 @@ The package can be code-signed and notarized automatically, please refer to the 
 The packake section control variable and generates a post command to code-sign the plug-ins. Code-signing is supported on macOS for all the plug-in formats and only for AAX on Windows. The AAX code-signing requires a PACE subcription. 
 
 If the package section is enabled, a sign target is generated to code-sign (and notarize) the package on macOS and Windows. This target is included in the ALL targets.
+When notarizing the package on macOS, the log file containing the info, warning and error is created at `${CMAKE_CURRENT_BINARY_DIR}/Package/info.log`.
 
 The option `CJAP_CODESIGN_ENABLED` enables the section (default: OFF).  
 Refer to `cjap_codesign.cmake` for further information and to adapt the code-signing to your need.  
