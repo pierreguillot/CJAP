@@ -1,6 +1,6 @@
 # CJAP 
 
-The CJAP (CMake JUCE Audio Plug-In) repository contains a collection of CMake tools (scripts and functions) to facilitate the development of audio plug-ins with the JUCE framework. The tools are split into several sections for generating compiler warnings, debugging, testing, codesigning, packaging and formatting. All the features can be included using the main file jap.cmake and enabled, disabled and configured using the options and variables defined at the top of the corresponding CMake files.
+The CJAP (CMake JUCE Audio Plug-In) repository contains a collection of CMake tools (scripts and functions) to facilitate the development of audio plug-ins with the JUCE framework. The tools are split into several sections for generating compiler warnings, debugging, testing, codesigning, packaging and formatting. All the features can be included using the main file cjap.cmake and enabled, disabled and configured using the options and variables defined at the top of the corresponding CMake files.
 
 ## Warnings
 The warnings section enables most of Xcode's warnings. It can be used in addition to `juce::juce_recommended_warning_flags`.
