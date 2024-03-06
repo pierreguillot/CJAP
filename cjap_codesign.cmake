@@ -58,10 +58,10 @@ if(CJAP_CODESIGN_ENABLED AND NOT CJAP_CODESIGN_PACE_EMAIL STREQUAL "" AND NOT CJ
       message(STATUS "AAX Plugins codesigning enabled")
     endif()
 
-  file(WRITE "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "#!/bin/sh\n\n")
-  file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "codesign --sign \"${CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY}\" --deep -f -o runtime --timestamp -v \"\$1\"\n")
-  file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "codesign -dvv \"\$1\"\n")
-  file(CHMOD "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+    file(WRITE "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "#!/bin/sh\n\n")
+    file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "codesign --sign \"${CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY}\" --deep -f -o runtime --timestamp -v \"\$1\"\n")
+    file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "codesign -dvv \"\$1\"\n")
+    file(CHMOD "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
   elseif(WIN32)
     find_program(CJAP_CODESIGN_WRAPTOOL_EXE "wraptool")
