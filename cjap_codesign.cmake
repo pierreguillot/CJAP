@@ -9,7 +9,7 @@ option(CJAP_CODESIGN_ENABLED "Enable the plug-in code-signing" OFF)
 # The variables to sign AAX plug-ins
 set(CJAP_CODESIGN_WINDOWS_KEYFILE "" CACHE PATH "The Windows (.p12) certificate file")
 set(CJAP_CODESIGN_WINDOWS_CERTFILE "${CMAKE_CURRENT_SOURCE_DIR}/Code-Signing-Certificate.pfx" CACHE PATH "The Windows (.pfx SHA256) certificate file")
-set(CJAP_CODESIGN_WINDOWS_KEYPASSWORD "" CACHE STRING "The password of the Windows (.p12) certificate file")
+set(CJAP_CODESIGN_WINDOWS_KEYPASSWORD "" CACHE STRING "The password of the Windows (.p12 and .pfx) certificate files")
 set(CJAP_CODESIGN_APPLE_KEYCHAIN_PROFILE_INSTALLER "notary-installer" CACHE STRING "The Apple keychain profile for installer")
 set(CJAP_CODESIGN_PACE_EMAIL "" CACHE STRING "The PACE developer email")
 set(CJAP_CODESIGN_PACE_WCGUID "" CACHE STRING "The PACE GUID")
