@@ -8,7 +8,6 @@ option(CJAP_CODESIGN_ENABLED "Enable the plug-in code-signing" OFF)
 
 # The variables to sign AAX plug-ins
 set(CJAP_CODESIGN_WINDOWS_KEYFILE "" CACHE PATH "The Windows (.p12) certificate file")
-set(CJAP_CODESIGN_WINDOWS_CERTFILE "${CMAKE_CURRENT_SOURCE_DIR}/Code-Signing-Certificate.pfx" CACHE PATH "The Windows (.pfx SHA256) certificate file")
 set(CJAP_CODESIGN_WINDOWS_KEYPASSWORD "" CACHE STRING "The password of the Windows (.p12 and .pfx) certificate files")
 set(CJAP_CODESIGN_APPLE_KEYCHAIN_PROFILE_INSTALLER "notary-installer" CACHE STRING "The Apple keychain profile for installer")
 set(CJAP_CODESIGN_PACE_EMAIL "" CACHE STRING "The PACE developer email")
@@ -18,6 +17,7 @@ set(CJAP_CODESIGN_TIMESTAMP_SERVER "http://timestamp.sectigo.com" CACHE STRING "
 # Internal
 set(CJAP_CODESIGN_BUILD_PATH "${CMAKE_CURRENT_BINARY_DIR}/Sign")
 set(CJAP_CODESIGN_SIGNATOR_FILE_PATH "${CJAP_CODESIGN_BUILD_PATH}/signator.sh")
+set(CJAP_CODESIGN_WINDOWS_CERTFILE "${CJAP_CODESIGN_BUILD_PATH}/cert.pfx")
 
 # - Searchs for a valid Apple developer certificate 
 #
@@ -67,6 +67,11 @@ if(CJAP_CODESIGN_ENABLED)
     find_program(CJAP_CODESIGN_WRAPTOOL_EXE "wraptool")
     if(CJAP_CODESIGN_WRAPTOOL_EXE)
       message(STATUS "AAX Plugins codesigning enabled")
+    endif()
+
+    if(CJAP_CODESIGN_WINDOWS_KEYFILE)
+      file(MAKE_DIRECTORY ${CJAP_CODESIGN_BUILD_PATH})
+      file(COPY_FILE ${CJAP_CODESIGN_WINDOWS_KEYFILE} ${CJAP_CODESIGN_WINDOWS_CERTFILE})
     endif()
   endif()
 endif()
