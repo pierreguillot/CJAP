@@ -55,10 +55,6 @@ Refer to `cjap_codesign.cmake` for further information and to adapt the code-sig
 ## Example
 
 ```cmake
-# Xcode Code Sign options (will initialize default variables for codesigning)
-set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "Developer ID Application" CACHE STRING "The Apple code sign identity")
-set(CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "FFFFFFFFFF" CACHE STRING "The Apple development team identifier")
-
 # JUCE options (will initialize default variables for packaging)
 set_directory_properties(PROPERTIES JUCE_COMPANY_COPYRIGHT "Copyright 2024 Ircam. All rights reserved")
 set_directory_properties(PROPERTIES JUCE_COMPANY_NAME "Ircam")
@@ -75,6 +71,8 @@ set(CJAP_TEST_AAXVALIDATOR_URL_APPLE_x86_64 "https://myserver.fr/aax-developer-t
 set(CJAP_CODESIGN_ENABLED ON)
 set(CJAP_CODESIGN_WINDOWS_KEYFILE "${CMAKE_CURRENT_SOURCE_DIR}/Code-Signing-Certificate.p12" CACHE PATH "The Windows (.p12) certificate file")
 set(CJAP_CODESIGN_WINDOWS_KEYPASSWORD "MyCodeSigningPassword" CACHE STRING "The password of the Windows (.p12) certificate files")
+set(CJAP_CODESIGN_APPLE_DEV_ID_APPLICATION_CERT "Developer ID Application" CACHE STRING "The Apple Developer ID Application certificate")
+set(CJAP_CODESIGN_APPLE_DEV_ID_INSTALLER_CERT "Developer ID Installer" CACHE STRING "The Apple Developer ID Installer certificate")
 set(CJAP_CODESIGN_PACE_EMAIL "john.doe@ircam.fr" CACHE STRING "The PACE developer email")
 set(CJAP_CODESIGN_PACE_WCGUID "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF" CACHE STRING "The PACE GUID")
 set(CJAP_CODESIGN_APPLE_KEYCHAIN_PROFILE_INSTALLER "MyInstallerProfile" CACHE STRING "The Apple keychain profile for installer")
