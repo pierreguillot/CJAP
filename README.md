@@ -83,7 +83,6 @@ set(CJAP_PACKAGE_COMPANY_LOGO_PNG_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Resource/Irc
 set(CJAP_PACKAGE_INSTALL_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Resource/Install.txt" CACHE PATH "The path to the install text file")
 set(CJAP_PACKAGE_CREDITS_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Resource/Credits.txt" CACHE PATH "The path to the credits text file")
 set(CJAP_PACKAGE_CHANGELOG_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Resource/ChangeLog.txt" CACHE PATH "The path to the change log text file")
-set(CJAP_PACKAGE_WINDOWS_APPID "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF" CACHE STRING "The PACE GUID")
 set(CJAP_PACKAGE_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}" CACHE STRING "The directory where the installation program will be created")
 
 # Main CJAP options for formatting
