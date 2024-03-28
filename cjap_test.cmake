@@ -55,7 +55,7 @@ endif()
 # is downloaded from the Github repository. If the VST3 SDK already
 # exist but its content is corrupted, the functions generates a fatal
 # error.
-function(jap_test_check_or_download_vst3_sdk)
+function(cjap_test_check_or_download_vst3_sdk)
   if(EXISTS ${CJAP_TEST_VST3_SDK_DIR})
     if(NOT EXISTS ${CJAP_TEST_VST3_SDK_DIR}/cmake/modules/SMTG_VST3_SDK.cmake)
       message(FATAL_ERROR "The VST3 SDK seems corrupted.")
@@ -66,7 +66,7 @@ function(jap_test_check_or_download_vst3_sdk)
       message(FATAL_ERROR "The VST3 SDK could not be retrieved: ${DL_RESULT}")
     endif()
   endif()
-endfunction(jap_test_check_or_download_vst3_sdk)
+endfunction(cjap_test_check_or_download_vst3_sdk)
 
 # - Verifies and downloads the AudioUnits SDK
 #
@@ -74,7 +74,7 @@ endfunction(jap_test_check_or_download_vst3_sdk)
 # SDK is downloaded from developer.apple.com. If the AudioUnits SDK already
 # exist but its content is corrupted, the functions generates a fatal
 # error.
-function(jap_test_check_or_download_au_sdk)
+function(cjap_test_check_or_download_au_sdk)
   if(EXISTS ${CJAP_TEST_AUDIOUNIT_SDK_DIR})
     if(NOT EXISTS ${CJAP_TEST_AUDIOUNIT_SDK_DIR}/CoreAudio/AudioUnits/AUPublic)
       message(FATAL_ERROR "The AudioUnit SDK seems corrupted.")
@@ -104,7 +104,7 @@ function(jap_test_check_or_download_au_sdk)
       message(FATAL_ERROR "Failed to extract Core Audio Utility Classes from downloaded '${CORE_AUDIO_UTILITY_CLASSES_ZIP}'.")
     endif()
   endif()
-endfunction(jap_test_check_or_download_au_sdk)
+endfunction(cjap_test_check_or_download_au_sdk)
 
 # - Searchs and downloads the pluginval program
 #
@@ -163,9 +163,9 @@ endif(CJAP_TEST_AUVAL_ENABLED AND APPLE)
 if(CJAP_TEST_ARATESTHOST_ENABLED)
   find_program(CJAP_TEST_ARATESTHOST_EXE "ARATestHost" PATHS "${CJAP_TEST_BINARY_DIR}/AraTestHost/bin/Release/")
   if(NOT CJAP_TEST_ARATESTHOST_EXE)
-    jap_test_check_or_download_vst3_sdk()
+    cjap_test_check_or_download_vst3_sdk()
     if(APPLE)
-      jap_test_check_or_download_au_sdk()
+      cjap_test_check_or_download_au_sdk()
       execute_process(COMMAND ${CMAKE_COMMAND} . -B "${CJAP_TEST_BINARY_DIR}/AraTestHost" -G ${CMAKE_GENERATOR} "-DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO" "-DARA_VST3_SDK_DIR=${CJAP_TEST_VST3_SDK_DIR}" "-DARA_AUDIO_UNIT_SDK_DIR=${CJAP_TEST_AUDIOUNIT_SDK_DIR}" "-DARA_SETUP_DEBUGGING=OFF" WORKING_DIRECTORY "${CJAP_TEST_ARA_SDK_DIR}/ARA_Examples" RESULT_VARIABLE DL_RESULT OUTPUT_QUIET)
     elseif(UNIX)
       execute_process(COMMAND ${CMAKE_COMMAND} . -B "${CJAP_TEST_BINARY_DIR}/AraTestHost" -G ${CMAKE_GENERATOR} "-DARA_VST3_SDK_DIR=${CJAP_TEST_VST3_SDK_DIR}" "-DARA_SETUP_DEBUGGING=OFF" WORKING_DIRECTORY "${CJAP_TEST_ARA_SDK_DIR}/ARA_Examples" RESULT_VARIABLE DL_RESULT OUTPUT_QUIET)
@@ -197,7 +197,7 @@ endif(CJAP_TEST_ARATESTHOST_ENABLED)
 # found, VST3 validator is downloaded and generated from the Github repository. 
 # If VST3 validator on cannot be used, the code generates a warning.
 if(CJAP_TEST_VST3VALIDATOR_ENABLED)
-  jap_test_check_or_download_vst3_sdk()
+  cjap_test_check_or_download_vst3_sdk()
   if(CJAP_TEST_ARATESTHOST_ENABLED)
     find_program(CJAP_TEST_VST3VALIDATOR_EXE "validator" PATHS "${CJAP_TEST_BINARY_DIR}/AraTestHost/bin/Release/" "${CJAP_TEST_BINARY_DIR}/Vst3Validator/bin/Release")
   else()
