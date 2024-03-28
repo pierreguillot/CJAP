@@ -13,7 +13,7 @@ if(CJAP_PACKAGE_ENABLED AND WIN32)
   set(PLUGIN_REFERENCE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/${CJAP_PACKAGE_PROJECT_NAME}_artefacts/$<CONFIG>")
   find_program(ISCC_EXE "iscc" HINTS "C:/Program Files (x86)/Inno Setup 6")
   if(ISCC_EXE)
-    add_custom_target(${CJAP_PACKAGE_PROJECT_NAME}_Package ALL ${ISCC_EXE} /DMyRefDir=${PLUGIN_REFERENCE_FOLDER} /O${CJAP_PACKAGE_INSTALL_DIR} ${CJAP_PACKAGE_ISS_FILE_PATH})
+    add_custom_target(${CJAP_PACKAGE_PROJECT_NAME}_Package ALL ${ISCC_EXE} /DMyConfig=$<CONFIG> /O${CJAP_PACKAGE_INSTALL_DIR} ${CJAP_PACKAGE_ISS_FILE_PATH})
 
     file(WRITE "${CJAP_PACKAGE_ISS_FILE_PATH}" "\n")
     file(APPEND "${CJAP_PACKAGE_ISS_FILE_PATH}" "#define MyAppName \"${CJAP_PACKAGE_PROJECT_NAME}\"\n")
@@ -70,22 +70,57 @@ if(CJAP_PACKAGE_ENABLED AND WIN32)
   endif()
 endif()
 
+# - Enables the generic packaging for the target on Windows
+#
+# The function enables the packaging given specific arguments.
+# See target_enable_windows_all_package
+function(target_enable_windows_generic_package target format destination)
+  if(TARGET ${target}_${format})
+    get_target_property(PLUGIN_NAME ${target} JUCE_PLUGIN_NAME)
+    get_target_property(PLUGIN_OUTPUT_DIRECTORY ${target} LIBRARY_OUTPUT_DIRECTORY)
+    string(REPLACE "$<CONFIG>" "{#MyConfig}" PLUGIN_OUTPUT_DIRECTORY ${PLUGIN_OUTPUT_DIRECTORY})
+    get_target_property(PLUGIN_IS_BUNDLE ${target}_${format} BUNDLE)
+    if(PLUGIN_IS_BUNDLE)
+      get_target_property(PLUGIN_EXTENSION ${target}_${format} BUNDLE_EXTENSION)
+      set(PLUGIN_ARTEFACT_FILE "${PLUGIN_OUTPUT_DIRECTORY}\\${format}\\${PLUGIN_NAME}.${PLUGIN_EXTENSION}")
+      file(APPEND "${CJAP_PACKAGE_ISS_FILE_PATH}" "Source: \"${PLUGIN_ARTEFACT_FILE}\\*\"; DestDir: \"${destination}\\${PLUGIN_NAME}.${PLUGIN_EXTENSION}\"; Flags: recursesubdirs ignoreversion\n")
+    else()
+      set(PLUGIN_ARTEFACT_FILE "${PLUGIN_OUTPUT_DIRECTORY}\\${format}\\${PLUGIN_NAME}.exe")
+      file(APPEND "${CJAP_PACKAGE_ISS_FILE_PATH}" "Source: \"${PLUGIN_ARTEFACT_FILE}\"; DestDir: \"${destination}\"; Flags: recursesubdirs ignoreversion\n")
+    endif()
+  endif()
+endfunction(target_enable_windows_generic_package)
+
+# - Enables packaging for all the formats of the target on Apple
+#
+# The function enables the packaging for the all formats.
+# The VST3 will be installed in the {commoncf64}\VST3 directory.
+# The VST3 - ARA will be installed in the{commoncf64}\ARA directory.
+# The AAX will be installed in the {commoncf64}\Avid\Audio\Plug-Ins directory.
+# The Standalone will be installed in the {app} directory.
+function(target_enable_windows_all_package target)
+  if(TARGET ${target}_VST3)
+  target_enable_windows_generic_package(${target} "VST3" "{commoncf64}\\VST3")
+    get_target_property(IS_ARA_EFFECT ${target} JUCE_IS_ARA_EFFECT)
+    if(IS_ARA_EFFECT)
+      target_enable_windows_generic_package(${target} "VST3" "{commoncf64}\\ARA")
+    endif()
+  endif()
+  if(TARGET ${target}_AAX)
+    target_enable_windows_generic_package(${target} "AAX" "{commoncf64}\\Avid\\Audio\\Plug-Ins")
+  endif()
+  if(TARGET ${target}_Standalone)
+    target_enable_windows_generic_package(${target} "Standalone" "{app}")
+  endif()
+endfunction(target_enable_windows_all_package)
+
 # - Enables the packaging for the target on Windows
 #
 # The function enables the packaging for:
 # VST3, AAX and Standalone
 function(target_enable_windows_cjap_package target)
   if(CJAP_PACKAGE_ENABLED AND WIN32)
-    get_target_property(PLUGIN_NAME ${target} JUCE_PLUGIN_NAME)
-    if(TARGET ${target}_VST3)
-      file(APPEND "${CJAP_PACKAGE_ISS_FILE_PATH}" "Source: \"{#MyRefDir}\\VST3\\${PLUGIN_NAME}.vst3\\*\"; DestDir: \"{commoncf64}\\VST3\\${PLUGIN_NAME}.vst3\"; Flags: recursesubdirs ignoreversion\n")
-    endif()
-    if(TARGET ${target}_AAX)
-      file(APPEND "${CJAP_PACKAGE_ISS_FILE_PATH}" "Source: \"{#MyRefDir}\\AAX\\${PLUGIN_NAME}.aaxplugin\\*\"; DestDir: \"{commoncf64}\\Avid\\Audio\\Plug-Ins\\${PLUGIN_NAME}.aaxplugin\"; Flags: recursesubdirs ignoreversion\n")
-    endif()
-    if(TARGET ${target}_Standalone)
-      file(APPEND "${CJAP_PACKAGE_ISS_FILE_PATH}" "Source: \"{#MyRefDir}\\Standalone\\${PLUGIN_NAME}.exe\"; DestDir: \"{app}\"; Flags: ignoreversion\n")
-    endif()
+    target_enable_windows_all_package(${target})
   endif()
 endfunction(target_enable_windows_cjap_package)
 
