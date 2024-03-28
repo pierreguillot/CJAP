@@ -17,17 +17,17 @@ set(CJAP_DEBUG_EXE_FOR_AAX "Pro Tools Developer" CACHE STRING "Executable used f
 # The code searchs for the program to debug and
 # generates warnings if a program cannot be found.
 if(CJAP_DEBUG_ENABLED AND APPLE)
-  function(jap_debug_get_app_bundle APP_PATH_VAR APP_NAME)
+  function(cjap_debug_get_app_bundle APP_PATH_VAR APP_NAME)
     find_program(APD_PROGRAM ${APP_NAME} NO_CACHE)
     if(APD_PROGRAM AND NOT IS_DIRECTORY ${APD_PROGRAM}) 
       cmake_path(GET APD_PROGRAM PARENT_PATH APD_PROGRAM_PARENT)
       cmake_path(SET APD_PROGRAM NORMALIZE "${APD_PROGRAM_PARENT}/../../")
     endif()
     set(${APP_PATH_VAR} ${APD_PROGRAM} PARENT_SCOPE)
-  endfunction(jap_debug_get_app_bundle)
+  endfunction(cjap_debug_get_app_bundle)
 
   # VST3
-  jap_debug_get_app_bundle(CJAP_DEBUG_EXE_VST3 ${CJAP_DEBUG_EXE_FOR_VST3})
+  cjap_debug_get_app_bundle(CJAP_DEBUG_EXE_VST3 ${CJAP_DEBUG_EXE_FOR_VST3})
   if(CJAP_DEBUG_EXE_VST3)
     message(STATUS "Plug-ins debug VST3: " ${CJAP_DEBUG_EXE_VST3})
     set(CJAP_DEBUG_EXE_DEFAULT ${CJAP_DEBUG_EXE_VST3})
@@ -36,7 +36,7 @@ if(CJAP_DEBUG_ENABLED AND APPLE)
   endif()
   
   # Audio Unit
-  jap_debug_get_app_bundle(CJAP_DEBUG_EXE_AUDIOUNIT ${CJAP_DEBUG_EXE_FOR_AUDIOUNIT})
+  cjap_debug_get_app_bundle(CJAP_DEBUG_EXE_AUDIOUNIT ${CJAP_DEBUG_EXE_FOR_AUDIOUNIT})
   if(CJAP_DEBUG_EXE_AUDIOUNIT)
     message(STATUS "Plug-ins debug AudioUnit: " ${CJAP_DEBUG_EXE_AUDIOUNIT})
   elseif(CJAP_DEBUG_EXE_DEFAULT)
@@ -47,7 +47,7 @@ if(CJAP_DEBUG_ENABLED AND APPLE)
   endif()
   
   # AAX
-  jap_debug_get_app_bundle(CJAP_DEBUG_EXE_AAX ${CJAP_DEBUG_EXE_FOR_AAX})
+  cjap_debug_get_app_bundle(CJAP_DEBUG_EXE_AAX ${CJAP_DEBUG_EXE_FOR_AAX})
   if(CJAP_DEBUG_EXE_AAX)
     message(STATUS "Plug-ins debug AAX: " ${CJAP_DEBUG_EXE_AAX})
   elseif(CJAP_DEBUG_EXE_DEFAULT)
