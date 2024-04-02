@@ -38,6 +38,7 @@ set(CJAP_TEST_PLUGINVAL_AU_ARGS ${CJAP_TEST_PLUGINVAL_ARGS} "--strictness-level"
 if(CJAP_TEST_ENABLED)
   enable_testing()
 endif()
+
 # Force configurations based on the OS
 if(UNIX AND NOT APPLE)
   # VST3, AAX and AUVAL validators are not supported on Linux
@@ -262,6 +263,9 @@ if(CJAP_TEST_AAXVALIDATOR_ENABLED)
     file(MAKE_DIRECTORY ${CJAP_TEST_BINARY_DIR}/aax_tests)
     set(CJAP_TEST_AAXVALIDATOR_EXE "${CJAP_TEST_BINARY_DIR}/aax_tests/runner")
     file(WRITE "${CJAP_TEST_AAXVALIDATOR_EXE}" "#!/bin/sh\n\n")
+    file(APPEND "${CJAP_TEST_AAXVALIDATOR_EXE}" "export LANG=en_US.UTF-8\n")
+    file(APPEND "${CJAP_TEST_AAXVALIDATOR_EXE}" "export LANGUAGE=en_US.UTF-8\n")
+    file(APPEND "${CJAP_TEST_AAXVALIDATOR_EXE}" "export LC_ALL=en_US.UTF-8\n\n")
     function(add_aax_test test_id)
       file(APPEND "${CJAP_TEST_AAXVALIDATOR_EXE}" "${CJAP_TEST_AAX_DTT_EXE} --script '4' -a 'pi_path='$1'' -a 'result_format=json' -a 'out_path=${CJAP_TEST_BINARY_DIR}/aax_tests' -a 'test_id=${test_id}'\n")
     endfunction(add_aax_test)
