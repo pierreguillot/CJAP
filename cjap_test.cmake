@@ -6,8 +6,6 @@
 # ToDo: Download ARA SDK if necessary
 # ToDo: Improve download of VST3 SDK (can use Fetch)
 
-enable_testing()
-
 # Options for defining the tests generated and their level.
 option(CJAP_TEST_ENABLED "Enable the all tests the tests" ON)
 option(CJAP_TEST_PLUGINVAL_ENABLED "Enable the test using pluginval" ${CJAP_TEST_ENABLED})
@@ -37,6 +35,9 @@ set(CJAP_TEST_PLUGINVAL_ARGS ${CJAP_TEST_PLUGINVAL_ARGS} "--verbose" "--timeout-
 set(CJAP_TEST_PLUGINVAL_VST3_ARGS ${CJAP_TEST_PLUGINVAL_ARGS} "--strictness-level" "10")
 set(CJAP_TEST_PLUGINVAL_AU_ARGS ${CJAP_TEST_PLUGINVAL_ARGS} "--strictness-level" "5")
 
+if(CJAP_TEST_ENABLED)
+  enable_testing()
+endif()
 # Force configurations based on the OS
 if(UNIX AND NOT APPLE)
   # VST3, AAX and AUVAL validators are not supported on Linux
