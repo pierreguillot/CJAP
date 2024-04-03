@@ -2,6 +2,8 @@
 #
 # This file includes all the modules for the audio plugin 
 
+cmake_minimum_required(VERSION 3.13)
+
 include(${CMAKE_CURRENT_LIST_DIR}/cjap_warnings.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cjap_debug.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/cjap_test.cmake)
