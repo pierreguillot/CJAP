@@ -41,7 +41,7 @@ if(CJAP_PACKAGE_ENABLED AND APPLE)
     file(APPEND "${CJAP_PACKAGE_PACKAGER_FILE_PATH}" "    pkgutil --check-signature \"\$pkgtarget\"\n")
   endif()
   file(APPEND "${CJAP_PACKAGE_PACKAGER_FILE_PATH}" "    rm -r \"$pkgdir\"\n")
-  file(APPEND "${CJAP_PACKAGE_PACKAGER_FILE_PATH}" "    \"${CJAP_PACKAGE_BUILD_PATH}/$name.plist\"\n")
+  file(APPEND "${CJAP_PACKAGE_PACKAGER_FILE_PATH}" "    rm \"${CJAP_PACKAGE_BUILD_PATH}/$name.plist\"\n")
   file(APPEND "${CJAP_PACKAGE_PACKAGER_FILE_PATH}" "}\n\n")
   file(CHMOD "${CJAP_PACKAGE_PACKAGER_FILE_PATH}" PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
