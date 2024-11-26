@@ -11,7 +11,7 @@ set(CJAP_PACKAGE_ISS_FILE_PATH "${CJAP_PACKAGE_BUILD_PATH}/Installer.iss")
 # The packaging requires the iscc porgram. 
 if(CJAP_PACKAGE_ENABLED AND WIN32)
   set(PLUGIN_REFERENCE_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/${CJAP_PACKAGE_PROJECT_NAME}_artefacts/$<CONFIG>")
-  find_program(ISCC_EXE "iscc" HINTS "C:/Program Files (x86)/Inno Setup 6")
+  find_program(ISCC_EXE "iscc" HINTS "$ENV{ProgramFiles\(x86\)}/Inno Setup 6")
   if(ISCC_EXE)
     add_custom_target(${CJAP_PACKAGE_PROJECT_NAME}_Package ALL ${ISCC_EXE} /DMyConfig=$<CONFIG> /O${CJAP_PACKAGE_INSTALL_DIR} ${CJAP_PACKAGE_ISS_FILE_PATH})
 
