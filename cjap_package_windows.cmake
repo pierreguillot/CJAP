@@ -57,17 +57,17 @@ if(CJAP_PACKAGE_ENABLED AND WIN32)
 
   if(CJAP_CODESIGN_ENABLED)
     if(NOT EXISTS ${CJAP_CODESIGN_WINDOWS_CERTFILE})
-      message(WARNING "${CJAP_PACKAGE_PROJECT_NAME}_Sign cannot be generated because the Windows (.pfx) certificate file doesn't exist")
+      message(WARNING "${CJAP_PACKAGE_PROJECT_NAME}_SignPackage cannot be generated because the Windows (.pfx) certificate file doesn't exist")
     else()
       find_program(SIGNTOOL_EXE "signtool" HINTS "C:/Program Files (x86)/Windows Kits/10/bin/10.0.19041.0/x64")
       if(SIGNTOOL_EXE)
-        add_custom_target(${CJAP_PACKAGE_PROJECT_NAME}_Sign ALL
+        add_custom_target(${CJAP_PACKAGE_PROJECT_NAME}_SignPackage ALL
         COMMAND ${SIGNTOOL_EXE} sign /f "${CJAP_CODESIGN_WINDOWS_CERTFILE}" /p "${CJAP_CODESIGN_WINDOWS_KEYPASSWORD}" /fd SHA256 /td SHA256 /tr ${CJAP_CODESIGN_TIMESTAMP_SERVER} ${CJAP_PACKAGE_INSTALL_DIR}/${CJAP_PACKAGE_PROJECT_NAME}-install.exe
         COMMAND ${SIGNTOOL_EXE} verify /pa ${CJAP_PACKAGE_INSTALL_DIR}/${CJAP_PACKAGE_PROJECT_NAME}-install.exe
         )
-        add_dependencies(${CJAP_PACKAGE_PROJECT_NAME}_Sign ${CJAP_PACKAGE_PROJECT_NAME}_Package)
+        add_dependencies(${CJAP_PACKAGE_PROJECT_NAME}_SignPackage ${CJAP_PACKAGE_PROJECT_NAME}_Package)
       else()
-        message(WARNING "${CJAP_PACKAGE_PROJECT_NAME}_Sign cannot be generated because signtool.exe is not found")
+        message(WARNING "${CJAP_PACKAGE_PROJECT_NAME}_SignPackage cannot be generated because signtool.exe is not found")
       endif()
     endif()
   endif()
