@@ -110,3 +110,17 @@ function(target_enable_linux_cjap_package target)
   endif()
 endfunction(target_enable_linux_cjap_package)
 
+# - Adds a file to the linux package
+#
+# The function adds a file to install with the package.
+function(linux_cjap_package_add_file file destination)
+  if(CJAP_PACKAGE_ENABLED AND UNIX AND NOT APPLE)
+    get_filename_component(file_name ${file} NAME)
+    get_filename_component(file_name_we ${file} NAME_WE)
+    string(REPLACE " " "_" file_name_we ${file_name_we})
+    file(APPEND ${CJAP_PACKAGE_INSTALL_DIR}/install.sh "cp -f $ThisPath/${file_name} ${destination}\n")
+    file(APPEND ${CJAP_PACKAGE_INSTALL_DIR}/uninstall.sh "rm -f ${destination}/${file_name}\n")
+    add_custom_target(${file_name_we}_Package COMMAND ${CMAKE_COMMAND} -E copy ${file} ${CJAP_PACKAGE_INSTALL_DIR})
+    add_dependencies(${CJAP_PACKAGE_PROJECT_NAME}_Package ${file_name_we}_Package)
+  endif()
+endfunction(linux_cjap_package_add_file)

@@ -73,3 +73,14 @@ function(target_enable_cjap_package target)
   endif()
 endfunction(target_enable_cjap_package)
 
+# - Adds a file to the package
+#
+# The function adds a file to install with the package.
+function(cjap_package_add_file file destination version)
+  if(CJAP_PACKAGE_ENABLED)
+    linux_cjap_package_add_file(${file} ${destination})
+    windows_cjap_package_add_file(${file} ${destination})
+    apple_cjap_package_add_file(${file} ${destination} ${version})
+  endif()
+endfunction(cjap_package_add_file)
+

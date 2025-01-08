@@ -130,3 +130,13 @@ function(target_enable_windows_cjap_package target)
   endif()
 endfunction(target_enable_windows_cjap_package)
 
+
+# - Adds a file to the Windows package
+#
+# The function adds a file to install with the package.
+function(windows_cjap_package_add_file file destination)
+  if(CJAP_PACKAGE_ENABLED AND WIN32)
+    cmake_path(NATIVE_PATH file file_native_path)
+    file(APPEND ${CJAP_PACKAGE_ISS_FILE_PATH} "Source: \"${file_native_path}\"; DestDir: \"${destination}\"; Flags: ignoreversion\n")
+  endif()
+endfunction(windows_cjap_package_add_file)

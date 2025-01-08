@@ -176,3 +176,35 @@ function(target_enable_apple_cjap_package target)
   endif()
 endfunction(target_enable_apple_cjap_package)
 
+# - Adds a file to the MacOS package
+#
+# The function adds a file to install with the package.
+function(apple_cjap_package_add_file file destination version)
+  if(CJAP_PACKAGE_ENABLED AND APPLE)
+    get_filename_component(file_name ${file} NAME)
+    get_filename_component(file_name_we ${file} NAME_WE)
+    string(REPLACE " " "_" file_name_we ${file_name_we})
+    string(TOLOWER "com.${CJAP_PACKAGE_COMPANY_NAME}.${file_name}.vamp.pkg" CJAP_FILE_PACKAGE_UID)
+
+    file(MAKE_DIRECTORY ${CJAP_PACKAGE_BUILD_PATH}/${file_name_we})
+    file(COPY ${file} DESTINATION ${CJAP_PACKAGE_BUILD_PATH}/${file_name_we})
+    
+    file(APPEND ${CJAP_PACKAGE_XML_FILE1_PATH} "    <pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\"/>\n")
+    file(APPEND ${CJAP_PACKAGE_XML_FILE2_PATH} "        <line choice=\"${CJAP_FILE_PACKAGE_UID}\"/>\n")
+    file(APPEND ${CJAP_PACKAGE_XML_FILE3_PATH} "    <choice id=\"${CJAP_FILE_PACKAGE_UID}\" visible=\"true\" start_selected=\"true\" title=\"${file_name}\"><pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\"/></choice><pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\" version=\"${version}\" onConclusion=\"none\">${file_name}.pkg</pkg-ref>\n")
+
+    if(VPP_NOTARIZE)
+      set(CJAP_PACKAGE_FILE_SCRIT "${CJAP_PACKAGE_BUILD_PATH}/${file_name_we}.sh")
+      file(WRITE ${CJAP_PACKAGE_FILE_SCRIT} "#!/bin/sh\n\n")
+      file(CHMOD ${CJAP_PACKAGE_FILE_SCRIT} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+      file(APPEND ${CJAP_PACKAGE_FILE_SCRIT} "codesign --sign \"${CJAP_CODESIGN_APPLE_DEV_ID_APPLICATION_CERT}\" -f -o runtime --timestamp \"${CJAP_PACKAGE_BUILD_PATH}/${file_name_we}/${file_name}\"\n")
+      file(APPEND ${CJAP_PACKAGE_FILE_SCRIT} "pkgbuild --sign \"${CJAP_CODESIGN_APPLE_DEV_ID_INSTALLER_CERT}\" --timestamp --root \"${CJAP_PACKAGE_BUILD_PATH}/${file_name_we}\" --identifier \"${CJAP_FILE_PACKAGE_UID}\" --version \"${version}\" --install-location \"${destination}/\" \"${CJAP_PACKAGE_BUILD_PATH}/${file_name}.pkg\"\n")
+      file(APPEND ${CJAP_PACKAGE_FILE_SCRIT} "pkgutil --check-signature \"${CJAP_PACKAGE_BUILD_PATH}/${file_name}.pkg\"\n")
+      add_custom_target(${file_name_we}_Package COMMAND ${CJAP_PACKAGE_FILE_SCRIT})
+    else()
+      add_custom_target(${file_name_we}_Package COMMAND pkgbuild --root "${CJAP_PACKAGE_BUILD_PATH}/${file_name_we}" --identifier "${CJAP_FILE_PACKAGE_UID}" --version "${version}" --install-location "${destination}/" "${CJAP_PACKAGE_BUILD_PATH}/${file_name}.pkg")
+    endif()
+
+    add_dependencies(${CJAP_PACKAGE_PROJECT_NAME}_Package ${file_name_we}_Package)
+  endif()
+endfunction(apple_cjap_package_add_file)
