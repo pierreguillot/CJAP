@@ -179,19 +179,24 @@ endfunction(target_enable_apple_cjap_package)
 # - Adds a file to the MacOS package
 #
 # The function adds a file to install with the package.
-function(apple_cjap_package_add_file file destination version)
+function(apple_cjap_package_add_file file destination version visible)
   if(CJAP_PACKAGE_ENABLED AND APPLE)
     get_filename_component(file_name ${file} NAME)
     get_filename_component(file_name_we ${file} NAME_WE)
     string(REPLACE " " "_" file_name_we ${file_name_we})
     string(TOLOWER "com.${CJAP_PACKAGE_COMPANY_NAME}.${file_name}.vamp.pkg" CJAP_FILE_PACKAGE_UID)
+    if(visible)
+      set(VISIBILITY "true")
+    else()
+      set(VISIBILITY "false")
+    endif()
 
     file(MAKE_DIRECTORY ${CJAP_PACKAGE_BUILD_PATH}/${file_name_we})
     file(COPY ${file} DESTINATION ${CJAP_PACKAGE_BUILD_PATH}/${file_name_we})
     
     file(APPEND ${CJAP_PACKAGE_XML_FILE1_PATH} "    <pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\"/>\n")
     file(APPEND ${CJAP_PACKAGE_XML_FILE2_PATH} "        <line choice=\"${CJAP_FILE_PACKAGE_UID}\"/>\n")
-    file(APPEND ${CJAP_PACKAGE_XML_FILE3_PATH} "    <choice id=\"${CJAP_FILE_PACKAGE_UID}\" visible=\"true\" start_selected=\"true\" title=\"${file_name}\"><pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\"/></choice><pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\" version=\"${version}\" onConclusion=\"none\">${file_name}.pkg</pkg-ref>\n")
+    file(APPEND ${CJAP_PACKAGE_XML_FILE3_PATH} "    <choice id=\"${CJAP_FILE_PACKAGE_UID}\" visible=\"${VISIBILITY}\" start_selected=\"true\" title=\"${file_name}\"><pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\"/></choice><pkg-ref id=\"${CJAP_FILE_PACKAGE_UID}\" version=\"${version}\" onConclusion=\"none\">${file_name}.pkg</pkg-ref>\n")
 
     if(VPP_NOTARIZE)
       set(CJAP_PACKAGE_FILE_SCRIT "${CJAP_PACKAGE_BUILD_PATH}/${file_name_we}.sh")
