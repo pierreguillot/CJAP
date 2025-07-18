@@ -21,7 +21,7 @@ set(CJAP_CODESIGN_PACE_PASSWORD "" CACHE STRING "The PACE Password for the cloud
 set(CJAP_CODESIGN_TIMESTAMP_SERVER "http://timestamp.sectigo.com" CACHE STRING "The timestamp server to sign packages on Windows")
 
 # Internal
-set(CJAP_CODESIGN_BUILD_PATH "${CMAKE_CURRENT_BINARY_DIR}/Sign")
+set(CJAP_CODESIGN_BUILD_PATH "${CMAKE_CURRENT_BINARY_DIR}/CJAP_Codesign")
 set(CJAP_CODESIGN_WINDOWS_CERTFILE "${CJAP_CODESIGN_BUILD_PATH}/cert.pfx")
 
 # - Searchs for a valid Apple developer certificate 
