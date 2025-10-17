@@ -69,8 +69,8 @@ set(CJAP_TEST_AAXVALIDATOR_URL_APPLE_x86_64 "https://myserver.fr/aax-developer-t
 
 # Main CJAP options for codesigning
 set(CJAP_CODESIGN_ENABLED ON)
-set(CJAP_CODESIGN_WINDOWS_KEYFILE "${CMAKE_CURRENT_SOURCE_DIR}/Code-Signing-Certificate.p12" CACHE PATH "The Windows (.p12) certificate file")
-set(CJAP_CODESIGN_WINDOWS_KEYPASSWORD "MyCodeSigningPassword" CACHE STRING "The password of the Windows (.p12) certificate files")
+set(CJAP_CODESIGN_WINDOWS_CERT "${CMAKE_CURRENT_SOURCE_DIR}/Code-Signing-Certificate.p12" CACHE PATH "The Windows (.p12) certificate file")
+set(CJAP_CODESIGN_WINDOWS_PASSWORD "MyCodeSigningPassword" CACHE STRING "The password of the Windows (.p12) certificate files")
 set(CJAP_CODESIGN_APPLE_DEV_ID_APPLICATION_CERT "Developer ID Application" CACHE STRING "The Apple Developer ID Application certificate")
 set(CJAP_CODESIGN_APPLE_DEV_ID_INSTALLER_CERT "Developer ID Installer" CACHE STRING "The Apple Developer ID Installer certificate")
 set(CJAP_CODESIGN_PACE_EMAIL "john.doe@ircam.fr" CACHE STRING "The PACE developer email")

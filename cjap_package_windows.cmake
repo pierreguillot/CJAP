@@ -85,14 +85,14 @@ if(CJAP_PACKAGE_ENABLED AND WIN32)
     message(WARNING "${CJAP_PACKAGE_PROJECT_NAME}_Package cannot be generated because ISCC.exe is not found")
   endif()
 
-  if(CJAP_CODESIGN_ENABLED)
-    if(NOT EXISTS ${CJAP_CODESIGN_WINDOWS_CERTFILE})
+  if(CJAP_CODESIGN_WINDOWS_PACKAGE_ENABLED)
+    if(NOT EXISTS ${CJAP_CODESIGN_WINDOWS_CERT_PFX})
       message(WARNING "${CJAP_PACKAGE_PROJECT_NAME}_SignPackage cannot be generated because the Windows (.pfx) certificate file doesn't exist")
     else()
       find_program(SIGNTOOL_EXE "signtool" HINTS "C:/Program Files (x86)/Windows Kits/10/bin/10.0.19041.0/x64")
       if(SIGNTOOL_EXE)
         add_custom_target(${CJAP_PACKAGE_PROJECT_NAME}_SignPackage ALL
-        COMMAND ${SIGNTOOL_EXE} sign /f "${CJAP_CODESIGN_WINDOWS_CERTFILE}" /p "${CJAP_CODESIGN_WINDOWS_KEYPASSWORD}" /fd SHA256 /td SHA256 /tr ${CJAP_CODESIGN_TIMESTAMP_SERVER} "${CJAP_PACKAGE_INSTALL_DIR_NAT}/${CJAP_PACKAGE_PROJECT_NAME}-install.exe"
+        COMMAND ${SIGNTOOL_EXE} sign /f "${CJAP_CODESIGN_WINDOWS_CERT_PFX}" /p "${CJAP_CODESIGN_WINDOWS_PASSWORD}" /fd SHA256 /td SHA256 /tr ${CJAP_CODESIGN_TIMESTAMP_SERVER} "${CJAP_PACKAGE_INSTALL_DIR_NAT}/${CJAP_PACKAGE_PROJECT_NAME}-install.exe"
         COMMAND ${SIGNTOOL_EXE} verify /pa "${CJAP_PACKAGE_INSTALL_DIR_NAT}/${CJAP_PACKAGE_PROJECT_NAME}-install.exe"
         )
         add_dependencies(${CJAP_PACKAGE_PROJECT_NAME}_SignPackage ${CJAP_PACKAGE_PROJECT_NAME}_Package)

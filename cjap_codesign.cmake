@@ -5,12 +5,13 @@
 
 # Options for enabling the the code-signing.
 option(CJAP_CODESIGN_ENABLED "Enable the plug-in code-signing" OFF)
+option(CJAP_CODESIGN_WINDOWS_PACKAGE_ENABLED "Enable the plug-in code-signing" ${CJAP_CODESIGN_ENABLED})
 
 # The variables to sign plug-ins
 set(CJAP_CODESIGN_PROJECT_NAME "${CMAKE_PROJECT_NAME}" CACHE STRING "The name of the project")
 option(CJAP_CODESIGN_TARGET_ENABLED "Create a global code-signing target instead of target post build commands" ON)
-set(CJAP_CODESIGN_WINDOWS_KEYFILE "" CACHE PATH "The Windows (.p12) certificate file")
-set(CJAP_CODESIGN_WINDOWS_KEYPASSWORD "" CACHE STRING "The password of the Windows (.p12 and .pfx) certificate files")
+set(CJAP_CODESIGN_WINDOWS_CERT "" CACHE PATH "The Windows (.p12) certificate file")
+set(CJAP_CODESIGN_WINDOWS_PASSWORD "" CACHE STRING "The password of the Windows (.p12) certificate files")
 set(CJAP_CODESIGN_APPLE_DEV_ID_APPLICATION_CERT "Developer ID Application" CACHE STRING "The Apple Developer ID Application certificate")
 set(CJAP_CODESIGN_APPLE_DEV_ID_INSTALLER_CERT "Developer ID Installer" CACHE STRING "The Apple Developer ID Installer certificate")
 set(CJAP_CODESIGN_APPLE_KEYCHAIN_PROFILE_INSTALLER "notary-installer" CACHE STRING "The Apple keychain profile for installer")
@@ -22,7 +23,7 @@ set(CJAP_CODESIGN_TIMESTAMP_SERVER "http://timestamp.sectigo.com" CACHE STRING "
 
 # Internal
 set(CJAP_CODESIGN_BUILD_PATH "${CMAKE_CURRENT_BINARY_DIR}/CJAP_Codesign")
-set(CJAP_CODESIGN_WINDOWS_CERTFILE "${CJAP_CODESIGN_BUILD_PATH}/cert.pfx")
+set(CJAP_CODESIGN_WINDOWS_CERT_PFX "${CJAP_CODESIGN_BUILD_PATH}/cert.pfx")
 
 # - Searchs for a valid Apple developer certificate 
 #
@@ -138,8 +139,8 @@ if(CJAP_CODESIGN_ENABLED)
       endif()
     endif()
 
-    if(CJAP_CODESIGN_WINDOWS_KEYFILE)
-      file(COPY_FILE ${CJAP_CODESIGN_WINDOWS_KEYFILE} ${CJAP_CODESIGN_WINDOWS_CERTFILE})
+    if(CJAP_CODESIGN_WINDOWS_CERT AND CJAP_CODESIGN_WINDOWS_PACKAGE_ENABLED)
+      file(COPY_FILE ${CJAP_CODESIGN_WINDOWS_CERT} ${CJAP_CODESIGN_WINDOWS_CERT_PFX})
     endif()
 
     if(CJAP_CODESIGN_WRAPTOOL_EXE)
@@ -148,8 +149,8 @@ if(CJAP_CODESIGN_ENABLED)
       file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "\n")
       file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set WRAPTOOL=\"${CJAP_CODESIGN_WRAPTOOL_EXE}\"\n")
       file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set ACCOUNT=${CJAP_CODESIGN_PACE_EMAIL}\n")
-      file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set KEYFILE=\"${CJAP_CODESIGN_WINDOWS_KEYFILE}\"\n")
-      file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set KEYPASSWORD=\"${CJAP_CODESIGN_WINDOWS_KEYPASSWORD}\"\n")
+      file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set KEYFILE=\"${CJAP_CODESIGN_WINDOWS_CERT}\"\n")
+      file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set KEYPASSWORD=\"${CJAP_CODESIGN_WINDOWS_PASSWORD}\"\n")
       file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set WCGUID=\"${CJAP_CODESIGN_PACE_WCGUID}\"\n")
       file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set ILOKTOOL=\"${CJAP_CODESIGN_ILOKTOOL_EXE}\"\n")
       file(APPEND "${CJAP_CODESIGN_SIGNATOR_FILE_PATH}" "set ILOKPASSWORD=\"${CJAP_CODESIGN_PACE_PASSWORD}\"\n")
